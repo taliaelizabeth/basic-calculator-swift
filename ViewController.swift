@@ -32,7 +32,6 @@ class ViewController: UIViewController {
         }
     }
   
-    
     private var userIsTyping = false
     
     @IBAction private func touchDigit(sender: UIButton) {
@@ -46,11 +45,7 @@ class ViewController: UIViewController {
         userIsTyping = true
     }
    
-  
-    
     var savedProgram: calculatorBrain.PropertyList?
-    
-    
     
     @IBAction func save() {
         savedProgram = brain.program
@@ -66,15 +61,6 @@ class ViewController: UIViewController {
     
     @IBAction func clear() {
         brain.clear()
-    }
-    
-    
-    @IBAction func addVariable(sender: UIButton) {
-    }
-    
-    
-    
-    @IBAction func useVariable(sender: UIButton) {
     }
     
     private var brain = calculatorBrain()
