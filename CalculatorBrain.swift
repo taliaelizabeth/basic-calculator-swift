@@ -11,7 +11,6 @@ import Foundation
 class calculatorBrain {
     
     private var accumulator = 0.0
-    
     private var internalProgram = [AnyObject]()
     
     func setOperand(operand: Double) {
@@ -19,55 +18,25 @@ class calculatorBrain {
         internalProgram.append(operand)
     }
     
-    //leave this empty for now?
-    var variablesDict = [String : Double]()
+    private var operations : Dictionary<String,Operation> = [
+        "×" : Operation.Binary({$0 * $1}),
+        "÷" : Operation.Binary({ $0 / $1 }),
+        "+" : Operation.Binary({$0 + $1}),
+        "-" : Operation.Binary({ $0 - $1 }),
+        "√" : Operation.Unary(sqrt),
+        "sin" : Operation.Unary(sin),
+        "cos" : Operation.Unary(cos),
+        "π" : Operation.Constant(M_PI),
+        "=" : Operation.Equals
+        ]
     
-    
-    func setOperand(variableName: String?) {
-        internalProgram.append(variablesDict[variableName!]!)
-        accumulator = variablesDict[variableName!]!
-            }
-        }
-    
-    private var operations = [String:Operation]()
-    
-    enum Operation {
+    private enum Operation {
         case Constant(Double)
         case Binary((Double, Double)-> Double)
         case Unary((Double)->Double)
         case Equals
-        case Operand(Double)
-        case Variable(String)
-        
-        var description: String {
-            switch self {
-            case .Operand(let operand):
-                return "\(operand)"
-            case .Variable(let symbol):
-                return symbol
-            case .Constant(let symbol):
-                return String(symbol)
-            case .Unary(let symbol):
-                return String(symbol)
-            case .Binary(let symbol):
-                return String(symbol)
-        }
-        }
     }
     
-    var operations : Dictionary<String,Operation> = [
-        "×" = Operation.Binary({$0 * $1}),
-        "÷" = Operation.Binary({ $0 / $1 }),
-        "+" = Operation.Binary({$0 + $1}),
-        "-" = Operation.Binary({ $0 - $1 }),
-        "√" = Operation.Unary(sqrt),
-        "sin" = Operation.Unary(sin),
-        "cos" = Operation.Unary(cos),
-        "π" = Operation.Constant(M_PI),
-        "=" = Operation.Equals
-        ]
-    
-    // this needs to include ability to use the stored value corresponding to a variable while performing operations
     func performOperation(symbol: String) {
         if let operation = operations[symbol] {
             internalProgram.append(symbol)
@@ -85,7 +54,7 @@ class calculatorBrain {
         }
     }
     
-    // should be fine?
+    //for binary operations
     func executePendingBinaryOperation() {
         if pending != nil {
             accumulator = pending!.binaryFunciton(pending!.firstOperand, accumulator)
